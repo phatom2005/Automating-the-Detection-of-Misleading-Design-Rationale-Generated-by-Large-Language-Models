@@ -1,0 +1,7 @@
+google-genai
+pandas
+openpyxl
+python-dotenv
+scikit-learn
+tqdm
+matplotlib
