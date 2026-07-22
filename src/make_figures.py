@@ -6,9 +6,10 @@ and data/results/metrics_summary.json (both produced by run_experiment.py +
 evaluate.py -- run those first). Pure plotting, no API calls.
 
 Per the project's figure budget (max ~4-5 figures for a 12-15 page LNCS paper):
-  1. confusion_matrix_misleading.png  - 2x2 confusion matrix heatmap for the
-     primary condition (verifier_variant=cot, include_context=True),
-     Misleading-presence: predicted vs ground truth.
+  1. confusion_matrix_misleading.pdf  - 2x2 confusion matrix heatmap (vector
+     PDF, print-ready at final size) for the primary condition
+     (verifier_variant=cot, include_context=True), Misleading-presence:
+     predicted vs ground truth.
   2. f1_by_category.png              - bar chart of P/R/F1 per IHUM category
      for the primary condition.
   3. ablation_prompt_variant.png     - bar chart comparing Misleading F1 across
@@ -50,22 +51,41 @@ def fig_confusion_matrix_misleading(summary: dict) -> None:
     m = summary["ablation_grid"][PRIMARY_KEY]["per_category"]["Misleading"]
     cm = np.array([[m["tn"], m["fp"]], [m["fn"], m["tp"]]])
 
-    fig, ax = plt.subplots(figsize=(4.5, 4))
-    im = ax.imshow(cm, cmap="Blues")
-    ax.set_xticks([0, 1])
-    ax.set_yticks([0, 1])
-    ax.set_xticklabels(["No Misleading (pred)", "Misleading (pred)"])
-    ax.set_yticklabels(["No Misleading (gt)", "Misleading (gt)"])
-    ax.set_xlabel("Verifier prediction")
-    ax.set_ylabel("Human ground truth")
-    ax.set_title(f"Misleading detection — n={m['n']} DRs\n(variant=cot, with context)")
-    for i in range(2):
-        for j in range(2):
-            ax.text(j, i, str(cm[i, j]), ha="center", va="center", color="black", fontsize=14)
-    fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
-    fig.tight_layout()
-    fig.savefig(FIG_DIR / "confusion_matrix_misleading.png", dpi=200)
-    plt.close(fig)
+    # Print-ready sizing for llncs: 3.6in = 0.75 * 4.82in (\textwidth), so the
+    # figure is drawn at its final printed size and LaTeX never rescales it.
+    with matplotlib.rc_context({
+        "font.size": 8,
+        "axes.labelsize": 8,
+        "xtick.labelsize": 8,
+        "ytick.labelsize": 8,
+        "pdf.fonttype": 42,
+    }):
+        fig, ax = plt.subplots(figsize=(3.6, 3.2))
+        im = ax.imshow(cm, cmap="Blues", vmin=0, vmax=cm.max())
+        ax.set_xticks([0, 1])
+        ax.set_yticks([0, 1])
+        ax.set_xticklabels(["Not Misleading", "Misleading"])
+        ax.set_yticklabels(["Not Misleading", "Misleading"])
+        ax.set_xlabel("Predicted")
+        ax.set_ylabel("Ground truth (human experts)")
+        # No ax.set_title(): the LaTeX \caption already describes the figure.
+        thresh = cm.max() / 2.0
+        for i in range(2):
+            for j in range(2):
+                value = cm[i, j]
+                text_color = "white" if value > thresh else "black"
+                ax.text(j, i, str(value), ha="center", va="center",
+                         color=text_color, fontsize=9, fontweight="bold")
+        cbar = fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
+        cbar.ax.tick_params(labelsize=8)
+        # Constrain everything inside the nominal figsize canvas *before* the
+        # tight-bbox save, otherwise long tick/axis labels can poke outside
+        # the canvas and bbox_inches="tight" will save a bbox wider than the
+        # 3.6in target -- which \includegraphics[width=0.75\textwidth] would
+        # then rescale, shrinking the 8pt font below the ~7pt print threshold.
+        fig.tight_layout(pad=0.15)
+        fig.savefig(FIG_DIR / "confusion_matrix_misleading.pdf", format="pdf", bbox_inches="tight", pad_inches=0.02)
+        plt.close(fig)
 
 
 def fig_f1_by_category(summary: dict) -> None:
