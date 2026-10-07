@@ -19,6 +19,9 @@ src/
                            macro F1, count-level MAE, and confound analysis
                            (DR length, architecture-decision type).
   make_figures.py          Generates the figures used in the paper.
+  review_analysis.py       Problem-clustered bootstrap CIs, breakdown by DR-generation
+                           strategy, and review-workload numbers (writes
+                           data/results/review_analysis.json). No API calls.
   list_available_models.py Diagnostic script to check which Gemini models an API key
                            can call (used while debugging free-tier quota issues).
 
@@ -61,6 +64,7 @@ python src/run_experiment.py --strategies zero-shot,CoT,AI-Agent --variants zero
 python src/run_experiment.py --strategies zero-shot,CoT,AI-Agent --variants cot --full-ablation
 python src/evaluate.py
 python src/make_figures.py
+python src/review_analysis.py
 ```
 
 `run_experiment.py` supports resuming: if interrupted (e.g. by a free-tier quota
@@ -69,12 +73,15 @@ retries only failed ones.
 
 ## Key finding
 
-Supplying the Verifier Agent with the original architecture-problem context (as
-opposed to judging the generated DR in isolation) is the single largest driver of
-performance: Misleading-detection F1 nearly triples (0.056 -> 0.152) and overall
-macro F1 rises from 0.406 to 0.608. Differences between verifier prompting
-strategies (zero-shot / chain-of-thought / few-shot) are comparatively small
-(macro F1 0.608-0.625). See `paper/paper_draft.tex` for full results and discussion.
+For the chain-of-thought verifier, supplying the original architecture-problem
+context (as opposed to judging the generated DR in isolation) raises macro F1 from
+0.406 to 0.608 (problem-clustered bootstrap 95% CI of the difference: 0.158-0.247).
+Misleading-presence F1 rises from 0.056 to 0.152, but that difference is not
+statistically distinguishable from zero (CI -0.035 to 0.228; only 20 positive DRs).
+Differences between verifier prompting strategies are comparatively small (macro
+F1 0.608-0.625). Results are DR-level category presence (not argument-level),
+for GPT-4-generated rationale and a single verifier model, each condition run once.
+See `paper/paper_draft.tex` for full results and limitations.
 
 ## Citation
 

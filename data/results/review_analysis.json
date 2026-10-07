@@ -1,0 +1,226 @@
+{
+  "by_generation_strategy": {
+    "cot|context=False": {
+      "AI-Agent": {
+        "n": 100,
+        "gt_pos": 5,
+        "tp": 0,
+        "fp": 3,
+        "fn": 5,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "CoT": {
+        "n": 100,
+        "gt_pos": 7,
+        "tp": 0,
+        "fp": 6,
+        "fn": 7,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "zero-shot": {
+        "n": 100,
+        "gt_pos": 8,
+        "tp": 1,
+        "fp": 6,
+        "fn": 7,
+        "precision": 0.143,
+        "recall": 0.125,
+        "f1": 0.133
+      }
+    },
+    "cot|context=True": {
+      "AI-Agent": {
+        "n": 100,
+        "gt_pos": 5,
+        "tp": 3,
+        "fp": 33,
+        "fn": 2,
+        "precision": 0.083,
+        "recall": 0.6,
+        "f1": 0.146
+      },
+      "CoT": {
+        "n": 100,
+        "gt_pos": 7,
+        "tp": 2,
+        "fp": 19,
+        "fn": 5,
+        "precision": 0.095,
+        "recall": 0.286,
+        "f1": 0.143
+      },
+      "zero-shot": {
+        "n": 100,
+        "gt_pos": 8,
+        "tp": 2,
+        "fp": 13,
+        "fn": 6,
+        "precision": 0.133,
+        "recall": 0.25,
+        "f1": 0.174
+      }
+    },
+    "few_shot|context=True": {
+      "AI-Agent": {
+        "n": 100,
+        "gt_pos": 5,
+        "tp": 3,
+        "fp": 35,
+        "fn": 2,
+        "precision": 0.079,
+        "recall": 0.6,
+        "f1": 0.14
+      },
+      "CoT": {
+        "n": 100,
+        "gt_pos": 7,
+        "tp": 3,
+        "fp": 17,
+        "fn": 4,
+        "precision": 0.15,
+        "recall": 0.429,
+        "f1": 0.222
+      },
+      "zero-shot": {
+        "n": 100,
+        "gt_pos": 8,
+        "tp": 3,
+        "fp": 15,
+        "fn": 5,
+        "precision": 0.167,
+        "recall": 0.375,
+        "f1": 0.231
+      }
+    },
+    "zero_shot|context=True": {
+      "AI-Agent": {
+        "n": 100,
+        "gt_pos": 5,
+        "tp": 4,
+        "fp": 43,
+        "fn": 1,
+        "precision": 0.085,
+        "recall": 0.8,
+        "f1": 0.154
+      },
+      "CoT": {
+        "n": 100,
+        "gt_pos": 7,
+        "tp": 2,
+        "fp": 23,
+        "fn": 5,
+        "precision": 0.08,
+        "recall": 0.286,
+        "f1": 0.125
+      },
+      "zero-shot": {
+        "n": 100,
+        "gt_pos": 8,
+        "tp": 5,
+        "fp": 19,
+        "fn": 3,
+        "precision": 0.208,
+        "recall": 0.625,
+        "f1": 0.312
+      }
+    }
+  },
+  "bootstrap": {
+    "cot|context=False": {
+      "misleading_f1": [
+        0.054,
+        0.0,
+        0.171
+      ],
+      "macro_f1": [
+        0.405,
+        0.368,
+        0.445
+      ]
+    },
+    "cot|context=True": {
+      "misleading_f1": [
+        0.15,
+        0.05,
+        0.265
+      ],
+      "macro_f1": [
+        0.607,
+        0.57,
+        0.646
+      ]
+    },
+    "few_shot|context=True": {
+      "misleading_f1": [
+        0.185,
+        0.067,
+        0.308
+      ],
+      "macro_f1": [
+        0.624,
+        0.584,
+        0.666
+      ]
+    },
+    "zero_shot|context=True": {
+      "misleading_f1": [
+        0.189,
+        0.084,
+        0.297
+      ],
+      "macro_f1": [
+        0.621,
+        0.587,
+        0.656
+      ]
+    },
+    "context_effect_cot": {
+      "delta_misleading_f1_ci95": [
+        -0.035,
+        0.228
+      ],
+      "delta_macro_f1_ci95": [
+        0.158,
+        0.247
+      ]
+    }
+  },
+  "workload": {
+    "cot|context=False": {
+      "flagged_DRs": 16,
+      "of_n": 300,
+      "flag_rate": 0.053,
+      "true_misleading_DRs": 20,
+      "caught": 1,
+      "DRs_reviewed_per_true_catch": 16.0
+    },
+    "cot|context=True": {
+      "flagged_DRs": 72,
+      "of_n": 300,
+      "flag_rate": 0.24,
+      "true_misleading_DRs": 20,
+      "caught": 7,
+      "DRs_reviewed_per_true_catch": 10.3
+    },
+    "few_shot|context=True": {
+      "flagged_DRs": 76,
+      "of_n": 300,
+      "flag_rate": 0.253,
+      "true_misleading_DRs": 20,
+      "caught": 9,
+      "DRs_reviewed_per_true_catch": 8.4
+    },
+    "zero_shot|context=True": {
+      "flagged_DRs": 96,
+      "of_n": 300,
+      "flag_rate": 0.32,
+      "true_misleading_DRs": 20,
+      "caught": 11,
+      "DRs_reviewed_per_true_catch": 8.7
+    }
+  }
+}
